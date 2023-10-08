@@ -2,6 +2,8 @@
 class Carta {
     constructor(palo, valor) {
         // TODO: Guardar palo y valor en propiedades
+        this.palo=palo;
+        this.valor=valor;
     }
   
     getValor() {
@@ -11,7 +13,16 @@ class Carta {
         * J, Q, K valen 10
         * A vale 11 
         */
-       return 0;
+      switch(this.valor) {
+        case "A":
+          return 11;
+          break;
+        case ("J"||"Q"||"K"):
+            return 10;
+            break;
+        default:
+          return parseInt(this.valor);
+      }
     }
   }
 

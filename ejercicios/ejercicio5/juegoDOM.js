@@ -57,6 +57,19 @@ class Juego {
         * agregar la carta al jugador
         * mostrar las puntuaciones
         */
+       if(jugador.plantado){
+        return;
+       }
+       let carta = this.baraja.sacarCarta();
+       if(oculto){
+        carta.ocultar;
+       }
+       jugador.agregarCarta(carta);
+       this.mostrarPuntuaciones(true);
+
+
+
+       }
     }
 
     mostrarOpciones(ended=false) {
@@ -99,6 +112,17 @@ class Juego {
         *           y mostrar el ganador
         *      si el jugador no se ha pasado de 21, jugar el turno del crupier
         */
+       if (this.jugador.plantado){
+        this.mostrarOpciones(true);
+            if (this.jugador.mano.getValor() > 21){
+                crupier.mostrarMano();
+                crupier.plantarse();
+                this.mostrarPuntuaciones();
+                this.mostrarGanador();
+                return;
+       }
+       this.jugarCrupier();
+    }
         
     }
 
@@ -114,7 +138,15 @@ class Juego {
         * mostrar las puntuaciones (sin ocultar la carta del crupier)
         * mostrar el ganador
         */
-        
+       this.crupier.mostrarMano();
+       while (this.crupier.mano.getValor() < 17){
+        this.mostrarPuntuaciones();
+        await new Promise (resolve=>setTimeout(resolve,1000))
+        this.sacarCarta(this.crupier);
+        this.mostrarPuntuaciones(false);
+       }
+       this.mostrarPuntuaciones(false);
+       this.mostrarGanador();
         
     }
 
@@ -126,7 +158,14 @@ class Juego {
         * Para que un jugador gane, debe tener más puntos que el otro y no haberse pasado de 21, o no haberse pasado de 21 y que el otro sí se haya pasado
         * Si los dos se han pasado de 21 o tienen la misma puntuación, devuelve null
         */
+       if ((jugador1.mano.getValor()>21 && jugador2.mano.getValor()<21) || (jugador1.mano.getValor() < jugador2.mano.getValor())){
+        return jugador2;
+       } else if((jugador2.mano.getValor()>21 && jugador1.mano.getValor()<21) || (jugador2.mano.getValor() < jugador1.mano.getValor())){
+        return jugador1;
+       } else {
         return null;
+       }
+       
     }
 
     mostrarGanador(borrar=false) {
